@@ -1,0 +1,13 @@
+---
+name: Revopush GitHub Action
+author: Revopush
+description: Publish, build or manage your Expo app with GitHub Actions
+runs:
+  using: node20
+  main: build/setup/index.js
+  post: build/setup-post/index.js
+inputs:
+  revopush-cli-version:
+    description: Revopush CLI version to install (the latest by default)
+  revopush-access-key:
+    description: Access key (use with secrets)
