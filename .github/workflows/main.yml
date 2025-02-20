@@ -16,8 +16,6 @@ jobs:
         with:
           revopush-cli-version: latest
           revopush-access-key: ${{ secrets.REVOPUSH_ACCESS_KEY }}
-      - name: Test revpush
-        run: revop
       - name: List app
         run: revopush app ls
 
