@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Revopush cli
+        uses: ./ # Uses an action in the root directory
+        id: revopush-cli
+        with:
+          revopush-cli-version: latest
+          revopush-access-key: ${{ secrets.REVOPUSH_ACCESS_KEY }}
+      - name: Test revpush
+        run: revopush whoami
+
