@@ -10,6 +10,12 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Tools cache
+        id: tool-caches
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache
+          key: ${{ runner.os }}-tools
       - name: Setup Revopush cli
         uses: ./ # Uses an action in the root directory
         id: revopush-cli
