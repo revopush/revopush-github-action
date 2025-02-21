@@ -28335,7 +28335,7 @@ async function installRevopushCLI(version) {
     const downloadPath = await toolCache.downloadTool(url, undefined, undefined);
     core.debug(`Download path: ${downloadPath}`);
     const filename = path.basename(url);
-    const installToPath = `${downloadPath}/${filename.split(".")[0]}`; // delete extension such as .tgz
+    const installToPath = `${downloadPath}/${path.parse(filename).name}`; // delete extension such as .tgz
     core.debug(`Install to path: ${installToPath}`);
     (0, child_process_1.execSync)(`npm install --prefix ${installToPath} ${downloadPath}/${filename}`);
     await toolCache.cacheDir(installToPath, 'revopush', version);

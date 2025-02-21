@@ -18,7 +18,7 @@ export async function installRevopushCLI(version: string): Promise<string> {
     core.debug(`Download path: ${downloadPath}`)
 
     const filename = path.basename(url);
-    const installToPath = `${downloadPath}/${filename.split(".")[0]}` // delete extension such as .tgz
+    const installToPath = `${downloadPath}/${path.parse(filename).name}` // delete extension such as .tgz
     core.debug(`Install to path: ${installToPath}`)
 
     execSync(`npm install --prefix ${installToPath} ${downloadPath}/${filename}`)
