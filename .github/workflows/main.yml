@@ -15,7 +15,7 @@ jobs:
         id: revopush-cli
         with:
           version: latest
-          token: ${{ secrets.REVOPUSH_ACCESS_KEY }}
+          accessKey: ${{ secrets.REVOPUSH_ACCESS_KEY }}
       - name: List app
         run: revopush app ls
 

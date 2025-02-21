@@ -8,7 +8,7 @@ import {execSync} from "child_process";
 export async function run(): Promise<void> {
     try {
         let version = presence(core.getInput('version'));
-        const token = core.getInput('token');
+        const token = core.getInput('accessKey');
 
         if (!version) {
             core.debug(`version was unset, defaulting to latest`);

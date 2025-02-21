@@ -24,15 +24,15 @@ inputs:
       and components required.
     default: 'latest'
     required: false
-  token:
+  accessKey:
     description: |-
       Access key for Revopush API (created either via UI or in CLI). Considered to be a secret.
       
          - uses: 'revopush/revopush-github-action@v1'
            with:
-             token:  ${{ secrets.REVOPUSH_ACCESS_KEY }}
+             accessKey:  ${{ secrets.REVOPUSH_ACCESS_KEY }}
       
-      You are responsible for ensuring the token was not neither expired nor deleted by a user who created it.
+      You are responsible for ensuring the accessKey was not neither expired nor deleted by a user who created it.
     required: true
 outputs:
   version:
