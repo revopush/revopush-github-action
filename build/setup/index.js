@@ -28247,7 +28247,7 @@ const child_process_1 = __nccwpck_require__(5317);
 async function run() {
     try {
         let version = (0, utils_1.presence)(core.getInput('version'));
-        const token = core.getInput('token');
+        const token = core.getInput('accessKey');
         if (!version) {
             core.debug(`version was unset, defaulting to latest`);
             version = 'latest';
@@ -28331,9 +28331,13 @@ function presence(input) {
 }
 async function installRevopushCLI(version) {
     const url = (0, child_process_1.execSync)(`npm view ${NPM_REVOPUSH_CLI_NAME}@${version} dist.tarball`).toString().trim();
+    core.debug(`Tarball URL: ${url}`);
     const downloadPath = await toolCache.downloadTool(url, undefined, undefined);
-    const installToPath = path.basename(downloadPath).split(".")[0]; // delete extension such as .tgz
-    (0, child_process_1.execSync)(`npm install --prefix ${installToPath} ${downloadPath}`);
+    core.debug(`Download path: ${downloadPath}`);
+    const filename = path.basename(url);
+    const installToPath = `${downloadPath}/${filename.split(".")[0]}`; // delete extension such as .tgz
+    core.debug(`Install to path: ${installToPath}`);
+    (0, child_process_1.execSync)(`npm install --prefix ${installToPath} ${downloadPath}/${filename}`);
     await toolCache.cacheDir(installToPath, 'revopush', version);
     core.addPath(`${installToPath}/node_modules/.bin`);
     return installToPath;
