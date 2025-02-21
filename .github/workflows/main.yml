@@ -4,7 +4,7 @@ on:
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: A job to test revopush cli
     steps:
       # To use this repository's private action,
       # you must check out the repository
