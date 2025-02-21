@@ -15,12 +15,12 @@ export async function installRevopushCLI(version: string): Promise<string> {
     const url = execSync(`npm view ${NPM_REVOPUSH_CLI_NAME}@${version} dist.tarball`).toString().trim();
     core.debug(`Tarball URL: ${url}`)
     const filename = path.basename(url);
+    let tempDirectory = _getTempDirectory();
 
-    const downloadedTool = await toolCache.downloadTool(url, `${_getTempDirectory}/${filename}`, undefined);
+    const downloadedTool = await toolCache.downloadTool(url, `${tempDirectory}/${filename}`, undefined);
     core.debug(`Download path: ${downloadedTool}`)
 
-
-    const installToPath = `${_getTempDirectory}/${path.parse(filename).name}` // delete extension such as .tgz
+    const installToPath = `${tempDirectory}/${path.parse(filename).name}` // delete extension such as .tgz
     core.debug(`Install to path: ${installToPath}`)
 
     execSync(`npm install --prefix ${installToPath} ${downloadedTool}`)
