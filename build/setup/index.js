@@ -28323,6 +28323,7 @@ exports.presence = presence;
 exports.installRevopushCLI = installRevopushCLI;
 const core = __importStar(__nccwpck_require__(7484));
 const path = __importStar(__nccwpck_require__(6928));
+const assert_1 = __nccwpck_require__(2613);
 const toolCache = __importStar(__nccwpck_require__(3472));
 const child_process_1 = __nccwpck_require__(5317);
 const NPM_REVOPUSH_CLI_NAME = "@revopush/code-push-cli";
@@ -28332,15 +28333,20 @@ function presence(input) {
 async function installRevopushCLI(version) {
     const url = (0, child_process_1.execSync)(`npm view ${NPM_REVOPUSH_CLI_NAME}@${version} dist.tarball`).toString().trim();
     core.debug(`Tarball URL: ${url}`);
-    const downloadPath = await toolCache.downloadTool(url, undefined, undefined);
-    core.debug(`Download path: ${downloadPath}`);
     const filename = path.basename(url);
-    const installToPath = `${downloadPath}/${path.parse(filename).name}`; // delete extension such as .tgz
+    const downloadedTool = await toolCache.downloadTool(url, `${_getTempDirectory}/${filename}`, undefined);
+    core.debug(`Download path: ${downloadedTool}`);
+    const installToPath = `${_getTempDirectory}/${path.parse(filename).name}`; // delete extension such as .tgz
     core.debug(`Install to path: ${installToPath}`);
-    (0, child_process_1.execSync)(`npm install --prefix ${installToPath} ${downloadPath}/${filename}`);
+    (0, child_process_1.execSync)(`npm install --prefix ${installToPath} ${downloadedTool}`);
     await toolCache.cacheDir(installToPath, 'revopush', version);
     core.addPath(`${installToPath}/node_modules/.bin`);
     return installToPath;
+}
+function _getTempDirectory() {
+    const tempDirectory = process.env['RUNNER_TEMP'] || '';
+    (0, assert_1.ok)(tempDirectory, 'Expected RUNNER_TEMP to be defined');
+    return tempDirectory;
 }
 
 
