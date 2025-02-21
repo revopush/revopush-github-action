@@ -13,11 +13,15 @@ export function presence(input: string | null | undefined): string | undefined {
 export async function installRevopushCLI(version: string): Promise<string> {
     const url = execSync(`npm view ${NPM_REVOPUSH_CLI_NAME}@${version} dist.tarball`).toString().trim();
     core.debug(`Tarball URL: ${url}`)
+
     const downloadPath = await toolCache.downloadTool(url, undefined, undefined);
     core.debug(`Download path: ${downloadPath}`)
-    const installToPath = path.basename(downloadPath).split(".")[0] // delete extension such as .tgz
+
+    const filename = path.basename(url);
+    const installToPath = `${downloadPath}/${filename.split(".")[0]}` // delete extension such as .tgz
     core.debug(`Install to path: ${installToPath}`)
-    execSync(`npm install --prefix ${installToPath} ${downloadPath}`)
+
+    execSync(`npm install --prefix ${installToPath} ${downloadPath}/${filename}`)
     await toolCache.cacheDir(installToPath, 'revopush', version);
 
     core.addPath(`${installToPath}/node_modules/.bin`);
