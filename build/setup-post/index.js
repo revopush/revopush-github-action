@@ -25643,19 +25643,58 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1798:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ 4377:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.executeAction = executeAction;
-const core_1 = __nccwpck_require__(7484);
-async function executeAction(action) {
-    return action().catch((error) => {
-        (0, core_1.setFailed)(error.message || error);
-        (0, core_1.debug)(error.stack || 'No stacktrace available');
-    });
+exports.run = run;
+const core = __importStar(__nccwpck_require__(7484));
+const child_process_1 = __nccwpck_require__(5317);
+async function run() {
+    try {
+        (0, child_process_1.execSync)(`revopush logout`);
+    }
+    catch (err) {
+        core.setFailed(`revopush/revopush-github-action failed with: ${err}`);
+    }
+}
+if (require.main === require.cache[eval('__filename')]) {
+    run();
 }
 
 
@@ -27572,29 +27611,12 @@ module.exports = parseParams
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-var exports = __webpack_exports__;
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.logoutAction = logoutAction;
-const utils_1 = __nccwpck_require__(1798);
-const exec_1 = __nccwpck_require__(5236);
-const io_1 = __nccwpck_require__(4994);
-(0, utils_1.executeAction)(logoutAction);
-async function logoutAction() {
-    try {
-        await (0, exec_1.exec)(await (0, io_1.which)("revopush"), ['logout']);
-    }
-    catch (ignored) {
-        console.log("Failed to logout");
-    }
-}
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(4377);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;

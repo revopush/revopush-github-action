@@ -28201,82 +28201,142 @@ module.exports = {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.cacheDir = void 0;
-exports.setupInput = setupInput;
-exports.setupAction = setupAction;
-const core_1 = __nccwpck_require__(7484);
-const exec_1 = __nccwpck_require__(5236);
+exports.run = run;
 const path_1 = __importDefault(__nccwpck_require__(6928));
-const assert_1 = __nccwpck_require__(2613);
-const os_1 = __importDefault(__nccwpck_require__(857));
-const tool_cache_1 = __nccwpck_require__(3472);
-const io_1 = __nccwpck_require__(4994);
+const core = __importStar(__nccwpck_require__(7484));
+const toolCache = __importStar(__nccwpck_require__(3472));
 const utils_1 = __nccwpck_require__(1798);
-var tool_cache_2 = __nccwpck_require__(3472);
-Object.defineProperty(exports, "cacheDir", ({ enumerable: true, get: function () { return tool_cache_2.cacheDir; } }));
-function setupInput() {
-    return {
-        revopushVersion: (0, core_1.getInput)('revopush-cli-version') || "latest",
-        accessKey: (0, core_1.getInput)('revopush-access-key'),
-    };
+const child_process_1 = __nccwpck_require__(5317);
+async function run() {
+    try {
+        let version = (0, utils_1.presence)(core.getInput('version'));
+        const token = core.getInput('token');
+        if (!version) {
+            core.debug(`version was unset, defaulting to latest`);
+            version = 'latest';
+        }
+        // Install the revopush if not already present
+        const toolPath = toolCache.find('revopush', version);
+        if (toolPath !== '') {
+            core.addPath(path_1.default.join(toolPath, '/node_modules/.bin'));
+        }
+        else {
+            core.debug(`no version of revopush matching "${version}" is installed`);
+            await (0, utils_1.installRevopushCLI)(version);
+        }
+        if (!token) {
+            core.info(`Skipped authentication: 'token' not provided.`);
+        }
+        else {
+            (0, child_process_1.execSync)(`revopush login --accessKey ${token}`);
+        }
+        core.setOutput('version', version);
+    }
+    catch (err) {
+        core.setFailed(`revopush/revopush-github-action failed with: ${err}`);
+    }
 }
-(0, utils_1.executeAction)(setupAction);
-async function setupAction(input = setupInput()) {
-    if (!input.revopushVersion) {
-        (0, core_1.info)(`Skipped installing @revopush/code-push-cli: 'revopush-cli-version' not provided.`);
-    }
-    else {
-        const version = input.revopushVersion;
-        const name = '@revopush/code-push-cli';
-        await (0, core_1.group)(`Installing @revopush/code-push-cli (${version})`, async () => {
-            const temp = tempPath(name, version);
-            await (0, io_1.mkdirP)(temp);
-            await (0, exec_1.exec)('npm', ['add', `${name}@${version}`], { cwd: temp });
-            let cliPath = await (0, tool_cache_1.cacheDir)(temp, name, version);
-            (0, core_1.addPath)(path_1.default.join(cliPath, 'node_modules', '.bin'));
-        });
-    }
-    if (!input.accessKey) {
-        (0, core_1.info)(`Skipped authentication: 'revopush-access-key' not provided.`);
-    }
-    else {
-        await (0, core_1.group)('Validating authenticated account', () => authenticate(input.accessKey, 'revopush'));
-    }
-}
-async function authenticate(token, cli = 'revopush') {
-    if (!cli) {
-        (0, core_1.info)(`Skipped token validation: no CLI installed, can't run 'whoami'.`);
-    }
-    else {
-        await (0, exec_1.exec)(await (0, io_1.which)(cli), ['login', '--accessKey', token]);
-    }
-    (0, core_1.exportVariable)('EXPO_TOKEN', token);
-}
-function tempPath(name, version) {
-    (0, assert_1.ok)(process.env['RUNNER_TEMP'], 'Could not resolve temporary path, RUNNER_TEMP not defined');
-    return path_1.default.join(process.env['RUNNER_TEMP'], name, version, os_1.default.arch());
+if (require.main === require.cache[eval('__filename')]) {
+    run();
 }
 
 
 /***/ }),
 
 /***/ 1798:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.executeAction = executeAction;
-const core_1 = __nccwpck_require__(7484);
-async function executeAction(action) {
-    return action().catch((error) => {
-        (0, core_1.setFailed)(error.message || error);
-        (0, core_1.debug)(error.stack || 'No stacktrace available');
-    });
+exports.presence = presence;
+exports.installRevopushCLI = installRevopushCLI;
+const core = __importStar(__nccwpck_require__(7484));
+const path = __importStar(__nccwpck_require__(6928));
+const toolCache = __importStar(__nccwpck_require__(3472));
+const child_process_1 = __nccwpck_require__(5317);
+const NPM_REVOPUSH_CLI_NAME = "@revopush/code-push-cli";
+function presence(input) {
+    return (input || '').trim() || undefined;
+}
+async function installRevopushCLI(version) {
+    const url = (0, child_process_1.execSync)(`npm view ${NPM_REVOPUSH_CLI_NAME}@${version} dist.tarball`).toString().trim();
+    const downloadPath = await toolCache.downloadTool(url, undefined, undefined);
+    const installToPath = path.basename(downloadPath).split(".")[0]; // delete extension such as .tgz
+    (0, child_process_1.execSync)(`npm install --prefix ${installToPath} ${downloadPath}`);
+    await toolCache.cacheDir(installToPath, 'revopush', version);
+    core.addPath(`${installToPath}/node_modules/.bin`);
+    return installToPath;
 }
 
 

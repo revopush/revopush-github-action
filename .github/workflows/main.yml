@@ -14,8 +14,8 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: revopush-cli
         with:
-          revopush-cli-version: latest
-          revopush-access-key: ${{ secrets.REVOPUSH_ACCESS_KEY }}
+          version: latest
+          token: ${{ secrets.REVOPUSH_ACCESS_KEY }}
       - name: List app
         run: revopush app ls
 

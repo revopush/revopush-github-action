@@ -1,13 +1,40 @@
 ---
-name: Revopush GitHub Action
+name: Set up Revopush management cli environment
 author: Revopush
-description: Publish, build or manage your Expo app with GitHub Actions
+description: |-
+  Downloads, installs, and configures a Revopush management CLI environment.
+  Adds the `revopush` CLI command to the $PATH.
 runs:
   using: node20
   main: build/setup/index.js
   post: build/setup-post/index.js
 inputs:
-  revopush-cli-version:
-    description: Revopush CLI version to install (the latest by default)
-  revopush-access-key:
-    description: Access key (use with secrets)
+  version:
+    description: |-
+      A string representing the version of the Revopush CLI
+      (`revopush`) to install (e.g. `"0.0.3"`). The default
+      value is `"latest"`, which will always download and install the latest
+      available Revpush CLI version.
+
+          - uses: 'revopush/revopush-github-action@v1'
+            with:
+              version: '0.0.3'
+
+      You are responsible for ensuring the `revopush` version matches the features
+      and components required.
+    default: 'latest'
+    required: false
+  token:
+    description: |-
+      Access key for Revopush API (created either via UI or in CLI). Considered to be a secret.
+      
+         - uses: 'revopush/revopush-github-action@v1'
+           with:
+             token:  ${{ secrets.REVOPUSH_ACCESS_KEY }}
+      
+      You are responsible for ensuring the token was not neither expired nor deleted by a user who created it.
+    required: true
+outputs:
+  version:
+    description: |-
+      Version of revopush cli that was installed.

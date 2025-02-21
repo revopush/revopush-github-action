@@ -1,13 +1,14 @@
-import {executeAction} from "../utils";
-import {exec} from "@actions/exec";
-import {which} from "@actions/io";
+import * as core from "@actions/core";
+import {execSync} from "child_process";
 
-executeAction(logoutAction);
-
-export async function logoutAction() {
+export async function run(): Promise<void> {
     try {
-        await exec(await which("revopush"), ['logout']);
-    } catch (ignored) {
-        console.log("Failed to logout")
+        execSync(`revopush logout`)
+    } catch (err) {
+        core.setFailed(`revopush/revopush-github-action failed with: ${err}`);
     }
+}
+
+if (require.main === module) {
+    run();
 }
