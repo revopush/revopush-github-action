@@ -31,6 +31,9 @@ export async function installRevopushCLI(version: string): Promise<string> {
     return installToPath
 }
 
+export async function getLatestVersion(): Promise<string> {
+    return execSync(`npm view ${NPM_REVOPUSH_CLI_NAME} version`).toString().trim()
+}
 
 function _getTempDirectory(): string {
     const tempDirectory = process.env['RUNNER_TEMP'] || ''

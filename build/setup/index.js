@@ -28249,12 +28249,14 @@ async function run() {
         let version = (0, utils_1.presence)(core.getInput('version'));
         const token = core.getInput('accessKey');
         if (!version) {
-            core.debug(`version was unset, defaulting to latest`);
-            version = 'latest';
+            let latestVersion = await (0, utils_1.getLatestVersion)();
+            core.debug(`version was unset, defaulting to latest: ${latestVersion}`);
+            version = latestVersion;
         }
         // Install the revopush if not already present
         const toolPath = toolCache.find('revopush', version);
         if (toolPath !== '') {
+            core.debug(`got cached version of revopush matching "${version}" is installed`);
             core.addPath(path_1.default.join(toolPath, '/node_modules/.bin'));
         }
         else {
@@ -28321,6 +28323,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.presence = presence;
 exports.installRevopushCLI = installRevopushCLI;
+exports.getLatestVersion = getLatestVersion;
 const core = __importStar(__nccwpck_require__(7484));
 const path = __importStar(__nccwpck_require__(6928));
 const assert_1 = __nccwpck_require__(2613);
@@ -28343,6 +28346,9 @@ async function installRevopushCLI(version) {
     await toolCache.cacheDir(installToPath, 'revopush', version);
     core.addPath(`${installToPath}/node_modules/.bin`);
     return installToPath;
+}
+async function getLatestVersion() {
+    return (0, child_process_1.execSync)(`npm view ${NPM_REVOPUSH_CLI_NAME} version`).toString().trim();
 }
 function _getTempDirectory() {
     const tempDirectory = process.env['RUNNER_TEMP'] || '';
