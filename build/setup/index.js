@@ -28248,7 +28248,7 @@ async function run() {
     try {
         let version = (0, utils_1.presence)(core.getInput('version'));
         const token = core.getInput('accessKey');
-        if (!version) {
+        if (!version || version === "latest") {
             let latestVersion = await (0, utils_1.getLatestVersion)();
             core.debug(`version was unset, defaulting to latest: ${latestVersion}`);
             version = latestVersion;

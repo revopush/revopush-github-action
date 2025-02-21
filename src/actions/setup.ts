@@ -10,7 +10,7 @@ export async function run(): Promise<void> {
         let version = presence(core.getInput('version'));
         const token = core.getInput('accessKey');
 
-        if (!version) {
+        if (!version || version === "latest") {
             let latestVersion = await getLatestVersion();
             core.debug(`version was unset, defaulting to latest: ${latestVersion}`);
             version = latestVersion;
