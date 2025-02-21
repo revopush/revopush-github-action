@@ -30,7 +30,7 @@ inputs:
       
          - uses: 'revopush/revopush-github-action@v1'
            with:
-             accessKey:  ${{ secrets.REVOPUSH_ACCESS_KEY }}
+             accessKey:  <your Revopush access-key from GitHub secrets>
       
       You are responsible for ensuring the accessKey was not neither expired nor deleted by a user who created it.
     required: true
