@@ -1,15 +1,14 @@
 name: 'Release'
 
 on:
-  workflow_dispatch:
-    secrets:
-      ACTIONS_BOT_TOKEN:
-        required: true
+  push:
+    branches:
+      - 'main'
+      - 'release/**/*'
 
 jobs:
   release:
-    # if: "startsWith(github.event.head_commit.message, 'Release: v')"
-    if: "startsWith(github.event.workflow_dispatch.head_commit.message, 'Release: v')"
+    if: "startsWith(github.event.head_commit.message, 'Release: v')"
     name: 'Release'
     uses: './.github/workflows/release-action.yml'
     # secrets must be explicitly passed to reusable workflows https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/reusing-workflows#using-inputs-and-secrets-in-a-reusable-workflow
