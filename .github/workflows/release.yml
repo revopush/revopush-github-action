@@ -12,8 +12,8 @@ on:
 
 jobs:
   create-release:
-    if: |-
-      ${{ startsWith(github.event.head_commit.message, 'Release: v') }}
+    # if: |-
+    #   ${{ startsWith(github.event.head_commit.message, 'Release: v') }}
     runs-on: 'ubuntu-latest'
     outputs:
       created: '${{ steps.create-release.outputs.created || false }}'
