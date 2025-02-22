@@ -7,8 +7,7 @@ on:
         required: true
 
 jobs:
-  jobs:
-    release:
-      if: "startsWith(github.event.head_commit.message, 'Release: v')"
-      name: 'Release'
-      uses: './.github/actions/release.yml'
+  release:
+    if: "startsWith(github.event.head_commit.message, 'Release: v')"
+    name: 'Release'
+    uses: './.github/actions/release.yml'
