@@ -11,17 +11,19 @@ runs:
 inputs:
   version:
     description: |-
-      A string representing the version of the Revopush CLI
-      (`revopush`) to install (e.g. `"0.0.3"`). The default
+      A string representing the version or version constraint of the Revopush CLI
+      (`revopush`) to install (e.g. `"0.0.3"` or `">= 0.0.3"`). The default
       value is `"latest"`, which will always download and install the latest
       available Revpush CLI version.
 
           - uses: 'revopush/revopush-github-action@v1'
             with:
-              version: '0.0.3'
+              version: '>= 0.0.3'
+      
+      If there is no installed `revopush` version that matches the given constraint, this GitHub Action will download and 
+      install the latest available version that still matches the constraint.
 
-      You are responsible for ensuring the `revopush` version matches the features
-      and components required.
+      You are responsible for ensuring the `revopush` version matches the features required.
     default: 'latest'
     required: false
   accessKey:
@@ -33,7 +35,7 @@ inputs:
              accessKey:  <your Revopush access-key from GitHub secrets>
       
       You are responsible for ensuring the accessKey was not neither expired nor deleted by a user who created it.
-    required: true
+    required: false
 outputs:
   version:
     description: |-

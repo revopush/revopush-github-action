@@ -2,19 +2,15 @@ import path from 'path';
 
 import * as core from '@actions/core';
 import * as toolCache from '@actions/tool-cache';
-import {getLatestVersion, installRevopushCLI, presence} from "../utils";
+import {computeVersion, installRevopushCLI, presence} from "../utils";
 import {execSync} from "child_process";
 
 export async function run(): Promise<void> {
     try {
-        let version = presence(core.getInput('version'));
-        const token = core.getInput('accessKey');
+        let requestedVersionSpec = presence(core.getInput('version'));
+        const token = presence(core.getInput('accessKey'));
 
-        if (!version || version === "latest") {
-            let latestVersion = await getLatestVersion();
-            core.debug(`version was unset, defaulting to latest: ${latestVersion}`);
-            version = latestVersion;
-        }
+        let version = await computeVersion(requestedVersionSpec);
 
         // Install the revopush if not already present
         const toolPath = toolCache.find('revopush', version);
