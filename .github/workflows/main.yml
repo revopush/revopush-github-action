@@ -22,7 +22,7 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: revopush-cli
         with:
-          version: '>= 0.0.2'
+          version: '0.0.4'
           accessKey: ${{ secrets.REVOPUSH_ACCESS_KEY }}
       - name: List app
         run: revopush app ls
