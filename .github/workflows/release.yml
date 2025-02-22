@@ -1,6 +1,10 @@
 name: 'Release'
 
 on:
+  workflow_dispatch:
+    secrets:
+      ACTIONS_BOT_TOKEN:
+        required: true
   workflow_call:
     secrets:
       ACTIONS_BOT_TOKEN:
