@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "revopush-github-action",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Revopush CLI in your GitHub Actions workflow",
   "main": "build/index.js",
   "repository": {
