@@ -16,7 +16,7 @@ jobs:
           restore-keys: |
             revopush-${{ runner.os }}-
       - name: Setup Revopush CLI
-        uses: 'revopush/revopush-github-action@v1.0.0'
+        uses: 'revopush/revopush-github-action@v1'
         id: setup-revopush-cli
         with:
           version: 'latest'
