@@ -40,3 +40,7 @@ outputs:
   version:
     description: |-
       Version of revopush cli that was installed.
+
+branding:
+  icon: 'terminal'
+  color: 'blue'
