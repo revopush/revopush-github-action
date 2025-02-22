@@ -10,9 +10,14 @@ Configures the Revopush Command Line Interface in the GitHub Actions environment
 
 ## Usage
 
+GitHub action supports all the commands available in the Revopush CLI of appropriate version.
+Please keep in mind that some commands (such as `release-react`) need to be executed and make sense only after you have
+loaded all the dependencies of your project and build React Native app.
+
 ```yaml
 jobs:
   job_id:
+    # Any runner supporting Node 20 or newer
     runs-on: ubuntu-latest
     steps:
       - name: Setup Revopush CLI
