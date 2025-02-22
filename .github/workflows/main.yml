@@ -2,12 +2,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  hello_world_job:
+  job_id:
     runs-on: ubuntu-latest
-    name: A job to test revopush cli
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v4
       - name: Tools cache
@@ -18,12 +15,13 @@ jobs:
           key: revopush-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             revopush-${{ runner.os }}-
-      - name: Setup Revopush cli
-        uses: ./ # Uses an action in the root directory
-        id: revopush-cli
+      - name: Setup Revopush CLI
+        uses: 'revopush/revopush-github-action@v1'
+        id: setup-revopush-cli
         with:
-          version: '0.0.4'
+          version: 'latest'
           accessKey: ${{ secrets.REVOPUSH_ACCESS_KEY }}
-      - name: List app
-        run: revopush app ls
-
+      - name: Release Android bundle
+        run: revopush release-react myAmazingAndroidApp android -d Staging
+      - name: Release ios bundle
+        run: revopush release-react myAmazingIOSApp ios -d Staging

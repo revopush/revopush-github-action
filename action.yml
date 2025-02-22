@@ -28,7 +28,7 @@ inputs:
     required: false
   accessKey:
     description: |-
-      Access key for Revopush API (created either via UI or in CLI). Considered to be a secret.
+      Revopush access key. Considered to be a secret.
       
          - uses: 'revopush/revopush-github-action@v1'
            with:
