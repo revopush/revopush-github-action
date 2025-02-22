@@ -25,7 +25,7 @@ jobs:
         uses: 'abcxyz/pkg/.github/actions/create-release@main' # ratchet:exclude
         with:
           github_token: '${{ secrets.ACTIONS_BOT_TOKEN }}'
-          expected_email: '72759630+google-github-actions-bot@users.noreply.github.com'
+          expected_email: 'ashirman8@gmail.com'
 
   publish-release:
     runs-on: 'ubuntu-latest'
