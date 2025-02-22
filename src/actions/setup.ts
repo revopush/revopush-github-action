@@ -15,15 +15,15 @@ export async function run(): Promise<void> {
         // Install the revopush if not already present
         const toolPath = toolCache.find('revopush', version);
         if (toolPath !== '') {
-            core.debug(`got cached version of revopush matching "${version}" is installed`);
+            core.debug(`Got cached version of revopush matching "${version}" `);
             core.addPath(path.join(toolPath, '/node_modules/.bin'));
         } else {
-            core.debug(`no version of revopush matching "${version}" is installed`);
+            core.debug(`No version of revopush matching "${version}" is installed. Will install it`);
             await installRevopushCLI(version);
         }
 
         if (!token) {
-            core.info(`Skipped authentication: 'token' not provided.`);
+            core.info(`Skipped authentication: 'accessKey' not provided.`);
         } else {
             execSync(`revopush login --accessKey ${token}`)
         }

@@ -30812,15 +30812,15 @@ async function run() {
         // Install the revopush if not already present
         const toolPath = toolCache.find('revopush', version);
         if (toolPath !== '') {
-            core.debug(`got cached version of revopush matching "${version}" is installed`);
+            core.debug(`Got cached version of revopush matching "${version}" `);
             core.addPath(path_1.default.join(toolPath, '/node_modules/.bin'));
         }
         else {
-            core.debug(`no version of revopush matching "${version}" is installed`);
+            core.debug(`No version of revopush matching "${version}" is installed. Will install it`);
             await (0, utils_1.installRevopushCLI)(version);
         }
         if (!token) {
-            core.info(`Skipped authentication: 'token' not provided.`);
+            core.info(`Skipped authentication: 'accessKey' not provided.`);
         }
         else {
             (0, child_process_1.execSync)(`revopush login --accessKey ${token}`);
@@ -30907,14 +30907,14 @@ async function installRevopushCLI(version) {
 async function computeVersion(version) {
     let spec;
     if (!version || version === 'latest') {
-        core.debug(`version was unset, defaulting to any version`);
+        core.debug(`Version was unset, defaulting to any version`);
         spec = '> 0.0.0';
     }
     else {
         spec = version;
     }
     let result = computeBestVersion(spec, getVersions());
-    core.debug(`computed version resolved to "${result}"`);
+    core.debug(`Computed version resolved to "${result}"`);
     return result;
 }
 function getVersions() {
@@ -30934,7 +30934,7 @@ function computeBestVersion(spec, versions) {
         }
     }
     if (!resolved) {
-        throw new Error(`failed to find any versions matching "${spec}"`);
+        throw new Error(`Failed to find any versions matching "${spec}"`);
     }
     return resolved;
 }

@@ -35,14 +35,14 @@ export async function installRevopushCLI(version: string): Promise<string> {
 export async function computeVersion(version?: string) {
     let spec
     if (!version || version === 'latest') {
-        core.debug(`version was unset, defaulting to any version`);
+        core.debug(`Version was unset, defaulting to any version`);
         spec = '> 0.0.0';
     } else {
         spec = version
     }
 
     let result = computeBestVersion(spec, getVersions());
-    core.debug(`computed version resolved to "${result}"`);
+    core.debug(`Computed version resolved to "${result}"`);
     return result;
 }
 
@@ -66,7 +66,7 @@ function computeBestVersion(spec: string, versions: string[]): string {
     }
 
     if (!resolved) {
-        throw new Error(`failed to find any versions matching "${spec}"`);
+        throw new Error(`Failed to find any versions matching "${spec}"`);
     }
     return resolved;
 }
