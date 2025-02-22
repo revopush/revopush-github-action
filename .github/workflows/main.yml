@@ -14,8 +14,10 @@ jobs:
         id: tool-caches
         uses: actions/cache@v4
         with:
-          path: /opt/hostedtoolcache
-          key: ${{ runner.os }}-tools
+          path: /opt/hostedtoolcache/revopush
+          key: revopush-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            revopush-${{ runner.os }}-
       - name: Setup Revopush cli
         uses: ./ # Uses an action in the root directory
         id: revopush-cli
