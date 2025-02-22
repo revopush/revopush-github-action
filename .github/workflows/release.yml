@@ -10,4 +10,4 @@ jobs:
   release:
     if: "startsWith(github.event.head_commit.message, 'Release: v')"
     name: 'Release'
-    uses: './.github/actions/release@main'
+    uses: './.github/workflows/actions/release@main'
